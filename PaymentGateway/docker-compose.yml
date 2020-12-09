@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  biplov.paymentgatewayapi:
+    image: ${DOCKER_REGISTRY-}biplovpaymentgatewayapi
+    build:
+      context: .
+      dockerfile: src/PaymentGateway/Api/Biplov.PaymentGatewayApi/Dockerfile
