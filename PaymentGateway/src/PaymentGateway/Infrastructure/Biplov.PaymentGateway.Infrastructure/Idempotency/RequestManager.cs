@@ -33,7 +33,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Idempotency
                     Time = DateTime.UtcNow
                 };
 
-            _context.Add(request);
+            _context.Add<ClientRequest>(request);
 
             await _context.SaveChangesAsync();
         }

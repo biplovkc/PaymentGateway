@@ -17,6 +17,10 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence
 
         public DbSet<Merchant> Merchants { get; set; }
 
+        public DbSet<Card> Cards { get; set; }
+
+        public DbSet<Payment> Payments { get;set; }
+
         private readonly IMediator _mediator;
         public static readonly ILoggerFactory DbLoggerFactory
             = LoggerFactory.Create(builder => { builder.AddSerilog(); });
