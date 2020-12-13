@@ -44,7 +44,7 @@ namespace Biplov.EventBus.Subscriptions
                     $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
 
             _handlers[eventName]
-                .Add(isDynamic ? SubscriptionInfo.Dynamic(handlerType) : SubscriptionInfo.Typed(handlerType));
+                .Add(SubscriptionInfo.Typed(handlerType));
         }
 
         public void RemoveSubscription<T, TH>()

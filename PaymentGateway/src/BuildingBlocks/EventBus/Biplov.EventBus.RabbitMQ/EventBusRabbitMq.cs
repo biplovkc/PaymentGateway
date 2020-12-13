@@ -101,10 +101,23 @@ namespace Biplov.EventBus.RabbitMQ
         {
             var eventName = _subsManager.GetEventKey<T>();
 
+            DoInternalSubscription(eventName);
+
             _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
             _subsManager.AddSubscription<T, TH>();
             StartBasicConsume();
+        }
+
+        private void DoInternalSubscription(string eventName)
+        {
+            var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
+            if (containsKey) return;
+            if (!_persistentConnection.IsConnected)
+                _persistentConnection.TryConnect();
+
+            using var channel = _persistentConnection.CreateModel();
+            channel.QueueBind(queue: _queueName, exchange: BROKER_NAME, routingKey: eventName);
         }
 
         public void Unsubscribe<T, TH>()
