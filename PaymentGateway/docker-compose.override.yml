@@ -1,13 +1,47 @@
 version: '3.4'
 
 services:
-  biplov.paymentgatewayapi:
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  #prometheus:
+  #  ports:
+  #    - 9090:9090
+  #
+  #grafana:
+  #  environment:
+  #    - GF_SECURITY_ADMIN_PASSWORD=P@ssw0rd
+  #  restart: always
+  #  ports:
+  #    - 3001:3000
+
+  mssqldata:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+
+  merchantidentityapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=mssqldata;Database=MerchantIdentity;User=sa;Password=Pass@word
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "5110:80"
+
+  paymentgatewayapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=mssqldata;Database=PaymentGateway;User=sa;Password=Pass@word
+    ports:
+      - "5111:80"
