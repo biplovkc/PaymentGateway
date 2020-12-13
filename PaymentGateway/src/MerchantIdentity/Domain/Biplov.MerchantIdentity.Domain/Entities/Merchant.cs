@@ -39,8 +39,8 @@ namespace Biplov.MerchantIdentity.Domain.Entities
             Email = email;
             // Keysize can be adjusted based on requirements
             using var rsa = new RSACryptoServiceProvider(512);
-            PublicKey = Convert.ToBase64String(rsa.ExportSubjectPublicKeyInfo());
-            PrivateKey = Convert.ToBase64String(rsa.ExportRSAPrivateKey());
+            PublicKey = $"pk_{Convert.ToBase64String(rsa.ExportSubjectPublicKeyInfo()).ToLower()}";
+            PrivateKey = $"sk_{Convert.ToBase64String(rsa.ExportRSAPrivateKey()).ToLower()}";
 
             if (currencies.Any(currency => currency.Length != 3))
                 throw new ArgumentException($"{nameof(currencies)} invalid");
