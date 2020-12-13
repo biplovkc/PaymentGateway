@@ -7,14 +7,12 @@ namespace Biplov.Common.Core
     {
         public Guid Id { get; }
 
-        protected Entity(){}
-
-        protected Entity(Guid id): this()
+        protected Entity()
         {
-            Id = id;
+            Id = Guid.NewGuid();
         }
 
-        private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
+        private List<DomainEvent> _domainEvents = new List<DomainEvent>();
         public IReadOnlyList<DomainEvent> DomainEvents => _domainEvents?.AsReadOnly();
 
         protected void RaiseDomainEvent(DomainEvent domainEvent) => _domainEvents.Add(domainEvent);

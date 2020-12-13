@@ -13,7 +13,7 @@ namespace Biplov.Common.Core
 
         protected Result(bool isSuccess, string error)
         {
-            if (isSuccess && string.IsNullOrWhiteSpace(error))
+            if (isSuccess && !string.IsNullOrWhiteSpace(error))
                 throw new InvalidOperationException("Success result cannot contain errors.");
 
             if (!isSuccess && string.IsNullOrWhiteSpace(error))
