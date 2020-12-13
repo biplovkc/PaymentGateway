@@ -1,10 +1,13 @@
-﻿using Biplov.Common.Core;
+﻿using System.Text.RegularExpressions;
+using Biplov.Common.Core;
 
 namespace Biplov.PaymentGateway.Domain.Entities
 {
     public class Card : Entity
     {
         private Card(){}
+
+        public string CardToken => $"cardTok_{Id:N}";
 
         /// <summary>
         /// Card number
@@ -23,6 +26,8 @@ namespace Biplov.PaymentGateway.Domain.Entities
         public string Cvv { get; }
 
         public Address BillingAddress { get; private set; }
+
+        public string MaskedCardNumber => Regex.Replace(Number, "[0-9](?=[0-9]{4})", "*");
 
         protected Card(string number, int expiryMonth, int expiryYear, string name, string cvv)
         {
