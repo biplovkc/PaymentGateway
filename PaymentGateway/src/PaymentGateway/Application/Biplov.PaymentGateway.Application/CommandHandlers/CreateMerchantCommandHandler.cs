@@ -31,16 +31,18 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             var result = await _merchantRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             return result.IsSuccess ? Result.Ok() : Result.Fail(result.Error);
         }
-    }
 
-    public class CreateMerchantIdentifiedCommandHandler : IdentifiedCommandHandler<CreateMerchantCommand, Result>
-    {
-        public CreateMerchantIdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager, 
-            ILogger<IdentifiedCommandHandler<CreateMerchantCommand, Result>> logger)
-            : base(mediator, requestManager, logger)
+        public class CreateMerchantIdentifiedCommandHandler : IdentifiedCommandHandler<CreateMerchantCommand, Result>
         {
-        }
+            public CreateMerchantIdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager, 
+                ILogger<IdentifiedCommandHandler<CreateMerchantCommand, Result>> logger)
+                : base(mediator, requestManager, logger)
+            {
+            }
 
-        protected override Result CreateResultForDuplicateRequest() => Result.Ok();
+            protected override Result CreateResultForDuplicateRequest() => Result.Ok();
+        }
     }
+
+    
 }

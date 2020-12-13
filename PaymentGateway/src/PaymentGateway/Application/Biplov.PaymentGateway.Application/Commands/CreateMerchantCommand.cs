@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Biplov.Common.Core;
 using Biplov.PaymentGateway.Application.Constants;
+using MediatR;
 
 namespace Biplov.PaymentGateway.Application.Commands
 {
     [DataContract]
-    public class CreateMerchantCommand : Command
+    public class CreateMerchantCommand : Command, IRequest<Result>
     {
         [DataMember]
         public Guid MerchantId { get; }

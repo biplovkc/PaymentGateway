@@ -5,5 +5,6 @@
         public const string CreateMerchant = "create-merchant-";
 
         public const string AddCard = "add-card-";
+        public const string CreatePayment = "create_payment_";
     }
 }

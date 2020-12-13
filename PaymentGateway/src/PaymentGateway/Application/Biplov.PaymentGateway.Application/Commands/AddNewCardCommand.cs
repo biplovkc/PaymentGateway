@@ -8,7 +8,7 @@ using MediatR;
 namespace Biplov.PaymentGateway.Application.Commands
 {
     [DataContract]
-    public class AddNewCardCommand : Command, IRequest<Result<CreateCardResponse>>
+    public class AddNewCardCommand : Command
     {
         [DataMember]
         public string Name { get; }

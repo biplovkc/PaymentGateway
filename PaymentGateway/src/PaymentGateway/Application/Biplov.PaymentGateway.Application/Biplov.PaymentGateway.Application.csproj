@@ -5,19 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Bank\Biplov.MockBank\Biplov.MockBank.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\Biplov.EventBus\Biplov.EventBus.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Biplov.PaymentGateway.Infrastructure\Biplov.PaymentGateway.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Response\" />
-    <Folder Include="Request\" />
     <Folder Include="QueryHandlers\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="FluentValidation" Version="9.3.0" />
   </ItemGroup>
 
 </Project>

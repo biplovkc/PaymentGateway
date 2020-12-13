@@ -6,7 +6,7 @@ namespace Biplov.PaymentGateway.Application.Commands
 {
     public abstract class Command : IRequest<Result>
     {
-        protected Command( string correlationId = null)
+        protected Command(string correlationId = null)
         {
             CorrelationId = correlationId ?? Guid.NewGuid().ToString();
         }

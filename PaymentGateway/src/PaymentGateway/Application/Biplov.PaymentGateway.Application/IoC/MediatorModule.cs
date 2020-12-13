@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 
 using Autofac;
-
-using Biplov.PaymentGateway.Application.Commands;
+using Biplov.PaymentGateway.Application.CommandHandlers;
 using Biplov.PaymentGateway.Domain.Events;
 
 using MediatR;
@@ -17,7 +16,7 @@ namespace Biplov.PaymentGateway.Application.IoC
                 .AsImplementedInterfaces();
 
             // Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
-            builder.RegisterAssemblyTypes(typeof(CreateMerchantCommand).GetTypeInfo().Assembly)
+            builder.RegisterAssemblyTypes(typeof(CreateMerchantCommandHandler).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             // Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events
