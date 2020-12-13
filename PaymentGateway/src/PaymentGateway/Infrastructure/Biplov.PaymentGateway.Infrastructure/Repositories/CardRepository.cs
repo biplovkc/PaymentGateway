@@ -13,13 +13,13 @@ namespace Biplov.PaymentGateway.Infrastructure.Repositories
     public class CardRepository : ICardRepository
     {
         private readonly PaymentContext _dbContext;
+        public IUnitOfWork UnitOfWork => _dbContext;
 
         public CardRepository(PaymentContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IUnitOfWork UnitOfWork => _dbContext;
         public async Task<Card> GetByIdAsync(Guid id)
         {
             using (Log.Logger.TimeOperation("getting card with id : {id}", id))
