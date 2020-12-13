@@ -15,6 +15,11 @@ WORKDIR /src
 COPY "BuildingBlocks/Core/Biplov.Common.Core/Biplov.Common.Core.csproj" "BuildingBlocks/Core/Biplov.Common.Core/Biplov.Common.Core.csproj"
 COPY "BuildingBlocks/EventBus/Biplov.EventBus/Biplov.EventBus.csproj" "BuildingBlocks/EventBus/Biplov.EventBus/Biplov.EventBus.csproj"
 COPY "BuildingBlocks/EventBus/Biplov.EventBus.RabbitMQ/Biplov.EventBus.RabbitMQ.csproj" "BuildingBlocks/EventBus/Biplov.EventBus.RabbitMQ/Biplov.EventBus.RabbitMQ.csproj"
+COPY "BuildingBlocks/Bank/Biplov.BankService/Biplov.BankService.csproj" "BuildingBlocks/Bank/Biplov.BankService/Biplov.BankService.csproj"
+COPY "BuildingBlocks/Bank/Biplov.MockBank/Biplov.MockBank.csproj" "BuildingBlocks/Bank/Biplov.MockBank/Biplov.MockBank.csproj"
+COPY "BuildingBlocks/RiskAnalysis/Biplov.RiskAnalysis/Biplov.RiskAnalysis.csproj" "BuildingBlocks/RiskAnalysis/Biplov.RiskAnalysis/Biplov.RiskAnalysis.csproj"
+COPY "BuildingBlocks/RiskAnalysis/Biplov.MockRiskAnalysis/Biplov.MockRiskAnalysis.csproj" "BuildingBlocks/RiskAnalysis/Biplov.MockRiskAnalysis/Biplov.MockRiskAnalysis.csproj"
+
 
 #Copy MerchantIdentity
 COPY "MerchantIdentity/Api/Biplov.MerchantIdentityApi/Biplov.MerchantIdentityApi.csproj" "MerchantIdentity/Api/Biplov.MerchantIdentityApi/Biplov.MerchantIdentityApi.csproj"

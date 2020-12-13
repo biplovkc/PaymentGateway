@@ -14,12 +14,16 @@ using Biplov.PaymentGateway.Application.IntegrationEvents;
 using Biplov.PaymentGateway.Application.IoC;
 using Biplov.PaymentGateway.Application.Validations;
 using Biplov.PaymentGateway.Infrastructure.Filters;
+using Biplov.PaymentGateway.Infrastructure.Persistence;
+using Biplov.PaymentGatewayApi.Filters;
 using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,6 +45,7 @@ namespace Biplov.PaymentGatewayApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //services.AddSingleton<IAuthorizationFilter, Authenticate>();
             services.AddOptions()
                 .AddCustomMVC()
                 .AddCustomIntegrations(Configuration)
@@ -83,8 +88,8 @@ namespace Biplov.PaymentGatewayApi
             var container = new ContainerBuilder();
             container.Populate(services);
 
+            container.RegisterModule(new ApplicationModule());
             container.RegisterModule(new MediatorModule());
-            //container.RegisterModule(new ApplicationModule());
 
             return new AutofacServiceProvider(container.Build());
         }
@@ -131,7 +136,7 @@ namespace Biplov.PaymentGatewayApi
                 });
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -289,18 +294,18 @@ namespace Biplov.PaymentGatewayApi
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var dbConnectionString = configuration.GetConnectionString("Default");
-            //services
-            //    .AddDbContext<PaymentContext>(options =>
-            //    {
-            //        options.UseSqlServer(dbConnectionString,
-            //             sqlServerOptionsAction: sqlOptions =>
-            //             {
-            //                 sqlOptions.MigrationsAssembly(typeof(PaymentContext).GetTypeInfo().Assembly.GetName().Name);
-            //                 sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-            //             });
-            //    },
-            //        ServiceLifetime.Scoped //explicitly denote that the DbContext is shared across HTTP request scope (graph of object started in the HTTP request)
-            //    );
+            services
+                .AddDbContext<PaymentContext>(options =>
+                {
+                    options.UseSqlServer(dbConnectionString,
+                         sqlServerOptionsAction: sqlOptions =>
+                         {
+                             sqlOptions.MigrationsAssembly(typeof(PaymentContext).GetTypeInfo().Assembly.GetName().Name);
+                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                         });
+                },
+                    ServiceLifetime.Scoped //explicitly denote that the DbContext is shared across HTTP request scope (graph of object started in the HTTP request)
+                );
             return services;
         }
 

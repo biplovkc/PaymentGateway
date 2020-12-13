@@ -28,7 +28,7 @@ namespace Biplov.PaymentGatewayApi
                 Log.Information("Applying migrations ({PaymentGatewayContext})...", AppName);
                 host.MigrateDbContext<PaymentContext>((context, services) =>
                 {
-                    // Add seed if needed
+                    context.Database.EnsureCreated();
                 });
 
                 Log.Information("Starting web host ({ApplicationContext})...", AppName);
