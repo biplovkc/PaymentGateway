@@ -7,7 +7,7 @@ namespace Biplov.PaymentGateway.Domain.Entities
     {
         private Card(){}
 
-        public string CardToken => $"cardTok_{Id:N}";
+        public string CardToken { get; } 
 
         /// <summary>
         /// Card number
@@ -25,22 +25,17 @@ namespace Biplov.PaymentGateway.Domain.Entities
 
         public string Cvv { get; }
 
-        public Address BillingAddress { get; private set; }
+        public string MaskedCardNumber { get; }
 
-        public string MaskedCardNumber => Regex.Replace(Number, "[0-9](?=[0-9]{4})", "*");
-
-        protected Card(string number, int expiryMonth, int expiryYear, string name, string cvv)
+        public Card(string number, int expiryMonth, int expiryYear, string name, string cvv)
         {
             Number = number;
             ExpiryMonth = expiryMonth;
             ExpiryYear = expiryYear;
             Name = name;
             Cvv = cvv;
-        }
-
-        public void SetBillingAddress(string addressLine1, string addressLine2, string city, string zipCode, string state, string country)
-        {
-            BillingAddress = new Address(addressLine1, addressLine2, city, zipCode, state, country);
+            CardToken = $"cardTok_{Id:N}";
+            MaskedCardNumber = Regex.Replace(Number, "[0-9](?=[0-9]{4})", "*");
         }
     }
 }

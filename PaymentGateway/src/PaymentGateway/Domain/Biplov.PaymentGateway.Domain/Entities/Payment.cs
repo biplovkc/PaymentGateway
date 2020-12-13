@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using Biplov.Common.Core;
 using Biplov.PaymentGateway.Domain.Enum;
+using Biplov.PaymentGateway.Domain.Events;
 
 namespace Biplov.PaymentGateway.Domain.Entities
 {
-    public class Payment 
+    public class Payment : Entity
     {
         private Payment(){}
+        
+        public string PaymentId { get; } 
 
         public Guid MerchantId { get; }
 
         /// <summary>
-        /// Source of payment.
+        /// Id payment source.
         /// </summary>
-        public PaymentSource Source { get; private set; }
+        public IdPaymentSource Source { get; private set; }
 
         /// <summary>
         /// Payment currency
         /// </summary>
         public string Currency { get; }
 
-        public int Amount { get; }
+        public decimal Amount { get; }
 
         public PaymentStatus Status { get; private set; }
 
@@ -63,14 +66,15 @@ namespace Biplov.PaymentGateway.Domain.Entities
         /// Additional metadata for given payment
         /// </summary>
         public IReadOnlyCollection<MetaData> MetaData => _metaData.AsReadOnly();
-
+        
         /// <summary>
         /// Merchant
         /// </summary>
         public Merchant Merchant { get; }
 
-        public Payment(Guid merchantId, string currency, int amount, string reference, string requestIp, string description)
+        public Payment(Guid merchantId, string currency, decimal amount, string reference, string requestIp, string description)
         {
+            PaymentId = $"payid_{Guid.NewGuid():N}";
             MerchantId = merchantId;
             Currency = currency;
             Amount = amount;
@@ -87,15 +91,10 @@ namespace Biplov.PaymentGateway.Domain.Entities
         }
 
 
-        public void SetIdPaymentSource(Guid paymentIdSource)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetCardPaymentSource(string name, string number, int expiryYear, int expiryMonth, string cvv, string phoneNumber)
+        public void SetCardPaymentSource(string cardId, string cvv)
         {
             // Add validations
-            Source = new CardPaymentSource(number, expiryMonth, expiryYear, name, cvv, phoneNumber);
+            Source = new IdPaymentSource(cardId, cvv);
         }
 
         public void SetNotificationsForMerchant(Uri successAddress, Uri errorAddress)
@@ -117,13 +116,13 @@ namespace Biplov.PaymentGateway.Domain.Entities
         public void InitiatePayment()
         {
             Status = PaymentStatus.InProcess;
-            //RaiseDomainEvent(new PaymentStartedDomainEvent(Id, Currency, Amount, Source, Recipient, BillingAddress, Description));
+            RaiseDomainEvent(new PaymentInitiatedDomainEvent(PaymentId, Source.CardToken, Currency, Amount, Source, Recipient, BillingAddress, Description));
         }
 
         public void ChangePaymentStatus(PaymentStatus status)
         {
             Status = status;
-            //RaiseDomainEvent(new PaymentStatusUpdatedDomainEvent(Id, Status, MerchantNotification));
         }
+
     }
 }
