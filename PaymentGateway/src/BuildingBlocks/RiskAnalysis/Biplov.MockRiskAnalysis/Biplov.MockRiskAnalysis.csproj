@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentGateway\src\BuildingBlocks\RiskAnalysis\Biplov.RiskAnalysis\Biplov.RiskAnalysis.csproj" />
+    <ProjectReference Include="..\Biplov.RiskAnalysis\Biplov.RiskAnalysis.csproj" />
   </ItemGroup>
 
 </Project>
