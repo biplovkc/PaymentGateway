@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Bank\Biplov.MockBank\Biplov.MockBank.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\Biplov.EventBus\Biplov.EventBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RiskAnalysis\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Biplov.PaymentGateway.Infrastructure\Biplov.PaymentGateway.Infrastructure.csproj" />
   </ItemGroup>
 

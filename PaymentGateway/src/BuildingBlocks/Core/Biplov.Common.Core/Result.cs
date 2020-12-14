@@ -11,27 +11,35 @@ namespace Biplov.Common.Core
 
         public string Error { get; }
 
-        protected Result(bool isSuccess, string error)
+        public object SuccessResult { get; }
+
+        protected Result(bool isSuccess, object successResult, string error)
         {
             if (isSuccess && !string.IsNullOrWhiteSpace(error))
                 throw new InvalidOperationException("Success result cannot contain errors.");
 
             if (!isSuccess && string.IsNullOrWhiteSpace(error))
                 throw new InvalidOperationException("Fail result must have error specified.");
-
+            if (!isSuccess && successResult != null)
+                throw new InvalidOperationException("Fail result cannot contain success result");
+            
             IsSuccess = isSuccess;
+            SuccessResult = successResult;
             Error = error;
         }
 
         public static Result Fail(string message) => 
-            new Result(false, message);
+            new Result(false, null, message);
 
         public static Result<T> Fail<T>(string message) => 
             new Result<T>(default, false, message);
         
 
         public static Result Ok() =>
-            new Result(true, string.Empty);
+            new Result(true, null, string.Empty);
+
+        public static Result Ok(object successResult) =>
+            new Result(true, successResult, string.Empty);
 
         public static Result<T> Ok<T>(T value) => 
             new Result<T>(value, true, string.Empty);
@@ -54,7 +62,7 @@ namespace Biplov.Common.Core
         }
 
         protected internal Result(T value, bool isSuccess, string error)
-            : base(isSuccess, error)
+            : base(isSuccess, null, error)
         {
             _value = value;
         }
