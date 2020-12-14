@@ -4,5 +4,27 @@
         <name>Biplov.PaymentGatewayApi</name>
     </assembly>
     <members>
+        <member name="M:Biplov.PaymentGatewayApi.Controllers.CardController.TokenizeCard(Biplov.PaymentGateway.Application.Request.TokenizeCardRequest)">
+            <summary>
+            Add a new card / tokenize card
+            </summary>
+            <param name="request">Tokenize card request</param>
+            <returns></returns>
+        </member>
+        <member name="M:Biplov.PaymentGatewayApi.Controllers.PaymentController.GetPayment(System.String,System.String)">
+            <summary>
+            Get payment by payment identifier
+            </summary>
+            <param name="paymentId">paymentIdentifier</param>
+            <param name="fields">fields to select from result</param>
+            <returns>Payment dto</returns>
+        </member>
+        <member name="M:Biplov.PaymentGatewayApi.Controllers.PaymentController.CreatePayment(Biplov.PaymentGateway.Application.Request.CreatePaymentRequest)">
+            <summary>
+            Create a new payment
+            </summary>
+            <param name="request">create payment request</param>
+            <returns>route pointing payment detail info</returns>
+        </member>
     </members>
 </doc>

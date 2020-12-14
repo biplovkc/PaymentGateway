@@ -33,6 +33,10 @@ namespace Biplov.PaymentGateway.Application.IoC
                 .As<ICardQuery>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<PaymentQuery>()
+                .As<IPaymentQuery>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<MockRiskAnalysisService>()
                 .As<IRiskAnalysisService>()
                 .InstancePerLifetimeScope();
