@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Biplov.Common.Core;
 using Biplov.PaymentGateway.Application.Commands;
 using Biplov.PaymentGateway.Application.Constants;
 using Biplov.PaymentGateway.Application.Queries;
 using Biplov.PaymentGateway.Application.Request;
+using Biplov.PaymentGateway.Application.Response;
 using Biplov.PaymentGatewayApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +26,15 @@ namespace Biplov.PaymentGatewayApi.Controllers
             _merchantQuery = merchantQuery;
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Add a new card / tokenize card
+        /// </summary>
+        /// <param name="request">Tokenize card request</param>
+        /// <returns></returns>
+        [HttpPost("tokenizeCard")]
+        [ProducesResponseType(typeof(CreateCardResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> TokenizeCard([FromBody] TokenizeCardRequest request)
         {
             var merchantIdentity = await _merchantQuery.GetMerchantIdAsync(GetAuthorizationKey());
@@ -34,7 +44,10 @@ namespace Biplov.PaymentGatewayApi.Controllers
             var innerCommand = new AddNewCardCommand(request.Name, request.Number, request.ExpiryMonth, request.ExpiryYear, request.Cvv, null, HttpContext.TraceIdentifier);
             var command = new IdentifiedCommand<AddNewCardCommand, Result>(innerCommand);
             var result = await _mediator.Send(command);
-            return Ok(result);
+
+            if (result.IsSuccess)
+                return Ok(result.SuccessResult);
+            return UnprocessableEntity(result.Error);
         }
     }
 }

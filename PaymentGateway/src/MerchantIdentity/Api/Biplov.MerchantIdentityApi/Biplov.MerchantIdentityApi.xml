@@ -4,5 +4,12 @@
         <name>Biplov.MerchantIdentityApi</name>
     </assembly>
     <members>
+        <member name="M:Biplov.MerchantIdentityApi.Controllers.MerchantController.CreateMerchant(Biplov.MerchantIdentity.Application.Requests.CreateMerchantRequest)">
+            <summary>
+            Creates a new merchant
+            </summary>
+            <param name="request">Create merchant request</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

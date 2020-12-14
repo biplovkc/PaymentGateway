@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 using Biplov.Common.Core;
+using Biplov.Common.Core.Extensions;
 using Biplov.PaymentGateway.Application.Commands;
 using Biplov.PaymentGateway.Application.Constants;
+using Biplov.PaymentGateway.Application.Dtos;
 using Biplov.PaymentGateway.Application.Queries;
 using Biplov.PaymentGateway.Application.Request;
 
@@ -19,20 +22,50 @@ namespace Biplov.PaymentGatewayApi.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMerchantQuery _merchantQuery;
+        private readonly IPaymentQuery _paymentQuery;
 
-        public PaymentController(IMediator mediator, IMerchantQuery merchantQuery)
+        public PaymentController(IMediator mediator, IMerchantQuery merchantQuery, IPaymentQuery paymentQuery)
         {
             _mediator = mediator;
             _merchantQuery = merchantQuery;
+            _paymentQuery = paymentQuery;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        /// <summary>
+        /// Get payment by payment identifier
+        /// </summary>
+        /// <param name="paymentId">paymentIdentifier</param>
+        /// <param name="fields">fields to select from result</param>
+        /// <returns>Payment dto</returns>
+        [HttpGet("{paymentId}", Name = "GetPayment")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaymentDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]        
+        public async Task<IActionResult> GetPayment([FromQuery] string paymentId, [FromQuery]string fields)
         {
-            return Ok();
+            var payment = await _paymentQuery.GetPaymentInfoAsync(paymentId);
+
+            if (payment.IsSuccess)
+                return Ok(payment.ShapeData(fields));
+
+            if (!payment.IsSuccess && payment.Error.Equals(ExternalErrorReason.PaymentNotFound))
+                return NotFound(paymentId);
+
+            return UnprocessableEntity(payment.Error);
         }
 
+        /// <summary>
+        /// Create a new payment
+        /// </summary>
+        /// <param name="request">create payment request</param>
+        /// <returns>route pointing payment detail info</returns>
         [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest request)
         {
             var merchantIdentity = await _merchantQuery.GetMerchantIdAsync(GetAuthorizationKey());
@@ -45,7 +78,10 @@ namespace Biplov.PaymentGatewayApi.Controllers
             var command = new IdentifiedCommand<CreatePaymentCommand, Result>(innerCommand);
 
             var result = await _mediator.Send(command);
-            return Ok(result);
+            if (!result.IsSuccess)
+                return UnprocessableEntity(result.Error);
+
+            return CreatedAtRoute("GetPayment", result.SuccessResult);
         }
     }
 }

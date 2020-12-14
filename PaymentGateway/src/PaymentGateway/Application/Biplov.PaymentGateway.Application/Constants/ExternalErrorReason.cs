@@ -19,5 +19,6 @@
         public const string InvalidSecretKey = "secret_key_invalid";
         public const string CurrencyNotSupported = "currency_not_supported";
         public const string InvalidCard = "card_is_invalid";
+        public const string PaymentNotFound = "payment_not_found";
     }
 }

@@ -34,19 +34,19 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             // Check if currency is supported for given merchant
             var isCurrencySupported = await _merchantQuery.IsCurrencySupported(request.MerchantId, request.Currency);
             if (!isCurrencySupported)
-                return Result.Fail(ExternalErrorReason.CurrencyNotSupported);
+                return Result.Fail<string>(ExternalErrorReason.CurrencyNotSupported);
 
             // Check if card if valid
             var isCardValid = await _cardQuery.IsCardValid(request.CardToken, request.Cvv);
             if (!isCardValid)
-                return Result.Fail(ExternalErrorReason.InvalidCard);
+                return Result.Fail<string>(ExternalErrorReason.InvalidCard);
 
             // Perform risk analysis
             if (!string.IsNullOrEmpty(request.OriginIp) && IPAddress.TryParse(request.OriginIp, out IPAddress ipAddress))
             {
                 var riskAnalysisResult = await _riskAnalysisService.GetRiskAnalysis(ipAddress);
                 if (!riskAnalysisResult.IsSuccess)
-                    return Result.Fail(riskAnalysisResult.Error);
+                    return Result.Fail<string>(riskAnalysisResult.Error);
             }
             var payment = new Payment(request.MerchantId, request.Currency, request.Amount, request.Reference, request.OriginIp, 
                 request.Description);
@@ -62,8 +62,8 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             var persistenceResult = await _paymentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
             return persistenceResult.IsSuccess
-                ? Result.Ok()
-                : Result.Fail(persistenceResult.Error);
+                ? Result.Ok(payment.PaymentId)
+                : Result.Fail<string>(persistenceResult.Error);
         }
     }
 
