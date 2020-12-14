@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Bank\Biplov.MockBank\Biplov.MockBank.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\Biplov.EventBus\Biplov.EventBus.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Biplov.PaymentGateway.Infrastructure\Biplov.PaymentGateway.Infrastructure.csproj" />

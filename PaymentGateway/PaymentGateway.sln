@@ -65,7 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RiskAnalysis", "RiskAnalysi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biplov.RiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.RiskAnalysis\Biplov.RiskAnalysis.csproj", "{62A193FC-4A30-4B12-B987-FD78E442B27D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biplov.MockRiskAnalysis", "..\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj", "{80337D05-6830-46C0-9BDF-31335C6EB1E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biplov.MockRiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj", "{B76A9B4E-7D95-4901-8805-F589021B4B19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,10 +133,10 @@ Global
 		{62A193FC-4A30-4B12-B987-FD78E442B27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62A193FC-4A30-4B12-B987-FD78E442B27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62A193FC-4A30-4B12-B987-FD78E442B27D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80337D05-6830-46C0-9BDF-31335C6EB1E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80337D05-6830-46C0-9BDF-31335C6EB1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80337D05-6830-46C0-9BDF-31335C6EB1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80337D05-6830-46C0-9BDF-31335C6EB1E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B76A9B4E-7D95-4901-8805-F589021B4B19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76A9B4E-7D95-4901-8805-F589021B4B19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76A9B4E-7D95-4901-8805-F589021B4B19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76A9B4E-7D95-4901-8805-F589021B4B19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,7 +171,7 @@ Global
 		{4C3BE23A-51A3-4855-ADC5-7572A01C0CCA} = {B1A89107-82AB-4942-9348-3FD5B22A6710}
 		{82238C85-E268-41B5-AB31-B3BB3A5B0A2A} = {C21CEA7E-DA1F-4A77-9164-82D3881E3A54}
 		{62A193FC-4A30-4B12-B987-FD78E442B27D} = {82238C85-E268-41B5-AB31-B3BB3A5B0A2A}
-		{80337D05-6830-46C0-9BDF-31335C6EB1E4} = {82238C85-E268-41B5-AB31-B3BB3A5B0A2A}
+		{B76A9B4E-7D95-4901-8805-F589021B4B19} = {82238C85-E268-41B5-AB31-B3BB3A5B0A2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F4C6DB4-C225-4CB9-AD5D-8AAD88D4967E}

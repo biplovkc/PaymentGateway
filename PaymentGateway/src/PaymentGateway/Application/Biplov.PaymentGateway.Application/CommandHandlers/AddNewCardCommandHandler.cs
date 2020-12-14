@@ -5,7 +5,6 @@ using Biplov.Common.Core;
 using Biplov.PaymentGateway.Application.Commands;
 using Biplov.PaymentGateway.Application.Constants;
 using Biplov.PaymentGateway.Application.Response;
-using Biplov.PaymentGateway.Domain.Entities;
 using Biplov.PaymentGateway.Domain.Interfaces;
 using Biplov.PaymentGateway.Infrastructure.Idempotency;
 using MediatR;
@@ -38,7 +37,7 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
                 return Result.Fail<CreateCardResponse>(ExternalErrorReason.CardValidationFailedByBank);
             }
             _logger.LogInformation("card validation request was successful for correlationid : {correlationId}", request.CorrelationId);
-            var card = new Card(request.Number, request.ExpiryMonth, request.ExpiryYear, request.Name, request.Cvv);
+            var card = new Domain.Entities.Card(request.Number, request.ExpiryMonth, request.ExpiryYear, request.Name, request.Cvv);
             _cardRepository.Add(card);
             var persistenceResult = await _cardRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

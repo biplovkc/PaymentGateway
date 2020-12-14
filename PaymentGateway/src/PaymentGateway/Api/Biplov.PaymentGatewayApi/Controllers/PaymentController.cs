@@ -39,7 +39,7 @@ namespace Biplov.PaymentGatewayApi.Controllers
             if (merchantIdentity.Equals(Guid.Empty))
                 return new UnauthorizedObjectResult(ExternalErrorReason.InvalidSecretKey);
 
-            var innerCommand = new CreatePaymentCommand(merchantIdentity.Value, request.CardToken, request.Cvv, request.Amount, request.Currency, 
+            var innerCommand = new CreatePaymentCommand(merchantIdentity, request.CardToken, request.Cvv, request.Amount, request.Currency, 
                 request.Shipping, request.Recipient, request.Reference, request.Description, request.OriginIp, request.SuccessUrl, request.ErrorUrl, request.MetaData,
                 HttpContext.TraceIdentifier);
             var command = new IdentifiedCommand<CreatePaymentCommand, Result>(innerCommand);
