@@ -10,11 +10,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
-    <DocumentationFile>C:\Users\BiplovKC\source\repos\GitClones\PaymentGateway\PaymentGateway\src\PaymentGateway\Api\Biplov.PaymentGatewayApi\Biplov.PaymentGatewayApi.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\Biplov.PaymentGatewayApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\BiplovKC\source\repos\GitClones\PaymentGateway\PaymentGateway\src\PaymentGateway\Api\Biplov.PaymentGatewayApi\Biplov.PaymentGatewayApi.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\Biplov.PaymentGatewayApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
