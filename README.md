@@ -96,3 +96,7 @@ Any user request that needs data persistence could be save in SQL and NoSQL data
 #### End to end encryption
 Each merchant is assigned with a private and public key. Request and response could be encrypted by merchant's public key which can only be decrypted by merchant's private key.
 
+#### Domain validations
+Data validation is heavily reliant on user's input validation, which is done via `FluentValidation` library. Invalid request are returned with `BadRequest` result before entering the controller's method. 
+
+However, this validation should be extended to domain level too. Since the core business logic and how a application should work is contained in Domain layers validating the inputs in domain layer is essential.

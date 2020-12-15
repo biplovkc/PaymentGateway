@@ -74,6 +74,12 @@ namespace Biplov.PaymentGateway.Domain.Entities
 
         public Payment(Guid merchantId, string currency, decimal amount, string reference, string requestIp, string description)
         {
+            if (currency.Length != 3)
+                throw new ArgumentException("currency_length_must_be_3_letters");
+
+            if (amount < 1)
+                throw new ArgumentException("invalid_amount");
+
             PaymentId = $"payid_{Guid.NewGuid():N}";
             MerchantId = merchantId;
             Currency = currency;
@@ -93,6 +99,8 @@ namespace Biplov.PaymentGateway.Domain.Entities
 
         public void SetCardPaymentSource(string cardId, string cvv)
         {
+            if (!(cvv.Length == 3 || cvv.Length == 4))
+                throw new ArgumentException("invalid_cvv");
             // Add validations
             Source = new IdPaymentSource(cardId, cvv);
         }
@@ -113,6 +121,8 @@ namespace Biplov.PaymentGateway.Domain.Entities
                 _metaData.Add(data);
         }
 
+
+        // TODO : Verify all the parameters are valid
         public void InitiatePayment()
         {
             Status = PaymentStatus.InProcess;

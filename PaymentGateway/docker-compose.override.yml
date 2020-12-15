@@ -12,16 +12,16 @@ services:
       - "15672:15672"
       - "5672:5672"
 
-  #prometheus:
-  #  ports:
-  #    - 9090:9090
-  #
-  #grafana:
-  #  environment:
-  #    - GF_SECURITY_ADMIN_PASSWORD=P@ssw0rd
-  #  restart: always
-  #  ports:
-  #    - 3001:3000
+  prometheus:
+    ports:
+      - 9090:9090
+  
+  grafana:
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=P@ssw0rd
+    restart: always
+    ports:
+      - 3001:3000
 
   mssqldata:
     environment:
