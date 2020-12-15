@@ -100,3 +100,6 @@ Each merchant is assigned with a private and public key. Request and response co
 Data validation is heavily reliant on user's input validation, which is done via `FluentValidation` library. Invalid request are returned with `BadRequest` result before entering the controller's method. 
 
 However, this validation should be extended to domain level too. Since the core business logic and how a application should work is contained in Domain layers validating the inputs in domain layer is essential.
+
+### Testing
+Currently only few test cases are written. These tests are meant to be a blueprint for other further tests.

@@ -4,6 +4,7 @@
 **/.git
 **/.gitignore
 **/.project
+!/src/Tests/**
 **/.settings
 **/.toolstarget
 **/.vs
@@ -14,7 +15,7 @@
 **/azds.yaml
 **/bin
 **/charts
-**/docker-compose*
+# **/docker-compose*
 **/Dockerfile*
 **/node_modules
 **/npm-debug.log
