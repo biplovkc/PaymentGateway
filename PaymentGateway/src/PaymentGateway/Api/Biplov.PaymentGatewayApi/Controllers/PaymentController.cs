@@ -42,12 +42,12 @@ namespace Biplov.PaymentGatewayApi.Controllers
         [ProducesResponseType(typeof(PaymentDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]        
-        public async Task<IActionResult> GetPayment([FromQuery] string paymentId, [FromQuery]string fields)
+        public async Task<IActionResult> GetPayment(string paymentId, [FromQuery]string fields)
         {
             var payment = await _paymentQuery.GetPaymentInfoAsync(paymentId);
 
             if (payment.IsSuccess)
-                return Ok(payment.ShapeData(fields));
+                return Ok(payment.Value.ShapeData(fields));
 
             if (!payment.IsSuccess && payment.Error.Equals(ExternalErrorReason.PaymentNotFound))
                 return NotFound(paymentId);
@@ -81,7 +81,7 @@ namespace Biplov.PaymentGatewayApi.Controllers
             if (!result.IsSuccess)
                 return UnprocessableEntity(result.Error);
 
-            return CreatedAtRoute("GetPayment", result.SuccessResult);
+            return CreatedAtRoute("GetPayment", routeValues: new {paymentId = result.SuccessResult},null);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Biplov.PaymentGateway.Application.Models;
+using Biplov.PaymentGateway.Application.Response;
 using Biplov.PaymentGateway.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,23 @@ namespace Biplov.PaymentGateway.Application.Queries
                 return false;
             }
             return true;
+        }
+
+        public async Task<CreateCardResponse> GetCardByCardNumberAsync(string cardNumber)
+        {
+            var card = await _db.Cards
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Number.Equals(cardNumber));
+
+            if (card is null)
+                return null;
+
+            return new CreateCardResponse
+            {
+                MaskedCardNumber = card.MaskedCardNumber,
+                CardToken = card.CardToken,
+                Cvv = card.Cvv
+            };
         }
 
         public async Task<Card> GetCardAsync(string cardToken)

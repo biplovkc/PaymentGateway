@@ -10,14 +10,36 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence.EntityConfiguration
         {
             builder.ToTable("Payments");
             builder.HasKey(x => x.Id);
-            
+
+            builder.Property(x => x.PaymentId)
+                .HasColumnName("PaymentId");
+
+            builder.Property(x => x.Status)
+                .HasColumnName("Status");
+
+            builder.HasOne(x => x.Merchant)
+                .WithMany(x => x.Payments);
+
             builder.Ignore(x => x.DomainEvents);
 
-            builder.HasIndex(x => x.MerchantId)
-                .IsUnique();
-
             builder.Property(x => x.Currency)
+                .HasColumnName("Currency")
                 .HasMaxLength(3);
+
+            builder.Property(x => x.Amount)
+                .HasColumnName("Amount");
+
+            builder.Property(x => x.Reference)
+                .HasColumnName("Reference");
+
+            builder.Property(x => x.RequestIp)
+                .HasColumnName("RequestIp");
+
+            builder.Property(x => x.Description)
+                .HasColumnName("Description");
+
+            builder.Property(x => x.RequestedAt)
+                .HasColumnName("RequestedAt");
 
             builder.OwnsOne(x => x.Source, r =>
             {

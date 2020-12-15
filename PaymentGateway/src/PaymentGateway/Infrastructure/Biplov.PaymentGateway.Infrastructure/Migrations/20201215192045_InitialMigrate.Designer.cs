@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biplov.PaymentGateway.Infrastructure.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20201213150754_RequestForIdempotency")]
-    partial class RequestForIdempotency
+    [Migration("20201215192045_InitialMigrate")]
+    partial class InitialMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,8 +62,20 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
+
                     b.Property<Guid>("MerchantIdentity")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PrivateKey")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PrivateKey");
+
+                    b.Property<string>("PublicKey")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PublicKey");
 
                     b.Property<string>("SupportedCurrencies")
                         .HasColumnType("nvarchar(max)");
@@ -82,20 +94,45 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
+
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasColumnType("nvarchar(3)")
+                        .HasColumnName("Currency");
 
-                    b.Property<Guid>("MerchantId")
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
+
+                    b.Property<Guid?>("MerchantId1")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PaymentId");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
+
+                    b.Property<string>("RequestIp")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RequestIp");
+
+                    b.Property<DateTimeOffset>("RequestedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("RequestedAt");
+
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MerchantId")
-                        .IsUnique();
+                    b.HasIndex("MerchantId1");
 
                     b.ToTable("Payments");
                 });
@@ -121,9 +158,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 {
                     b.HasOne("Biplov.PaymentGateway.Domain.Entities.Merchant", "Merchant")
                         .WithMany("Payments")
-                        .HasForeignKey("MerchantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MerchantId1");
 
                     b.OwnsOne("Biplov.PaymentGateway.Domain.Entities.Address", "BillingAddress", b1 =>
                         {

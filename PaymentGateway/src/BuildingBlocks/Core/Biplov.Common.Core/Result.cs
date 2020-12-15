@@ -62,7 +62,7 @@ namespace Biplov.Common.Core
         }
 
         protected internal Result(T value, bool isSuccess, string error)
-            : base(isSuccess, null, error)
+            : base(isSuccess, value, error)
         {
             _value = value;
         }

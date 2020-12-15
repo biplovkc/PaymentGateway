@@ -19,9 +19,14 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence.EntityConfiguration
             builder.HasIndex(x => x.MerchantIdentity)
                 .IsUnique();
 
-            builder.HasMany(x => x.Payments)
-                .WithOne(x => x.Merchant)
-                .HasForeignKey(x=>x.MerchantId);
+            builder.Property(x => x.Email)
+                .HasColumnName("Email");
+
+            builder.Property(x => x.PublicKey)
+                .HasColumnName("PublicKey");
+
+            builder.Property(x => x.PrivateKey)
+                .HasColumnName("PrivateKey");
 
             builder.Property(x => x.SupportedCurrencies)
                 .HasField("_supportedCurrencies")

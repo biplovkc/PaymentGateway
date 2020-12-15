@@ -70,6 +70,7 @@ namespace Biplov.PaymentGateway.Application.Commands
             SuccessUrl = successUrl;
             ErrorUrl = errorUrl;
             MetaData = metaData;
+            Recipient = recipient;
         }
     }
 }

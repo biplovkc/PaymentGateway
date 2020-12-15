@@ -20,10 +20,12 @@ namespace Biplov.PaymentGatewayApi.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMerchantQuery _merchantQuery;
-        public CardController(IMediator mediator, IMerchantQuery merchantQuery)
+        private readonly ICardQuery _cardQuery;
+        public CardController(IMediator mediator, IMerchantQuery merchantQuery, ICardQuery cardQuery)
         {
             _mediator = mediator;
             _merchantQuery = merchantQuery;
+            _cardQuery = cardQuery;
         }
 
         /// <summary>
@@ -46,7 +48,10 @@ namespace Biplov.PaymentGatewayApi.Controllers
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
-                return Ok(result.SuccessResult);
+            {
+                var card = await _cardQuery.GetCardByCardNumberAsync(request.Number);
+                return Ok(card);
+            }
             return UnprocessableEntity(result.Error);
         }
     }

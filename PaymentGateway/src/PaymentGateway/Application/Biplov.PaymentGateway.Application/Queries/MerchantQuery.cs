@@ -30,7 +30,7 @@ namespace Biplov.PaymentGateway.Application.Queries
             {
                 var merchant = await _db.Merchants
                     .AsNoTracking()
-                    .SingleOrDefaultAsync(x => x.PrivateKey.Equals(privateKey));
+                    .SingleOrDefaultAsync(x => x.PrivateKey == privateKey);
                 return merchant?.MerchantIdentity ?? Guid.Empty;
             }
         }

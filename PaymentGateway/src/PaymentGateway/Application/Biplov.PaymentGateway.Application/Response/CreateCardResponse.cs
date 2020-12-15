@@ -11,5 +11,7 @@
         /// Masked card number, displaying last 4 digits of the card
         /// </summary>
         public string MaskedCardNumber { get; set; }
+
+        public string Cvv { get; set; }
     }
 }

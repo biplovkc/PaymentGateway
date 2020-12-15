@@ -50,10 +50,13 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             }
             var payment = new Payment(request.MerchantId, request.Currency, request.Amount, request.Reference, request.OriginIp, 
                 request.Description);
-            payment.AddBillingAddress(request.Shipping.AddressLine1, request.Shipping.AddressLine2, request.Shipping.City,
-                request.Shipping.Zip, request.Shipping.State, request.Shipping.Country);
-            payment.SetPaymentRecipient(DateTime.Parse(request.Recipient.DateOfBirth), request.Recipient.AccountNumber, request.Recipient.FirstName,
-                request.Recipient.LastName, request.Recipient.Zip);
+            payment.SetCardPaymentSource(request.CardToken, request.Cvv);
+            if (request.Shipping != null)
+                payment.AddBillingAddress(request.Shipping.AddressLine1, request.Shipping.AddressLine2, request.Shipping.City,
+                    request.Shipping.Zip, request.Shipping.State, request.Shipping.Country);
+            if(request.Recipient != null)
+                payment.SetPaymentRecipient(DateTime.Parse(request.Recipient.DateOfBirth), request.Recipient.AccountNumber, request.Recipient.FirstName,
+                    request.Recipient.LastName, request.Recipient.Zip);
             payment.SetNotificationsForMerchant(request.SuccessUrl, request.ErrorUrl);
             payment.InitiatePayment();
 
