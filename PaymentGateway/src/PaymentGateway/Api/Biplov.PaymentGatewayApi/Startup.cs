@@ -15,20 +15,22 @@ using Biplov.PaymentGateway.Application.IoC;
 using Biplov.PaymentGateway.Application.Validations;
 using Biplov.PaymentGateway.Infrastructure.Filters;
 using Biplov.PaymentGateway.Infrastructure.Persistence;
-using Biplov.PaymentGatewayApi.Filters;
 using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+
+using Prometheus;
+
 using RabbitMQ.Client;
 
 namespace Biplov.PaymentGatewayApi
@@ -49,6 +51,7 @@ namespace Biplov.PaymentGatewayApi
             services.AddOptions()
                 .AddCustomMVC()
                 .AddCustomIntegrations(Configuration)
+                .AddCustomHealthCheck(Configuration)
                 .AddEventBus(Configuration)
                 .AddCustomDbContext(Configuration)
                 .AddSwagger()
@@ -128,6 +131,11 @@ namespace Biplov.PaymentGatewayApi
             }
 
             //app.UseHttpsRedirection();
+
+            //prometheus
+            app.UseHttpMetrics();
+            app.UseHealthChecksPrometheusExporter("/metrics");
+
             app.UseSwagger()
                 .UseSwaggerUI(setupAction: setup =>
                 {
@@ -141,6 +149,7 @@ namespace Biplov.PaymentGatewayApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapMetrics();
             });
 
             ConfigureEventBus(app);
@@ -150,7 +159,7 @@ namespace Biplov.PaymentGatewayApi
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            eventBus.Subscribe<MerchantRegisteredIntegrationEvent, 
+            eventBus.Subscribe<MerchantRegisteredIntegrationEvent,
                 MerchantRegisteredIntegrationEventHandler>();
         }
     }
@@ -182,6 +191,30 @@ namespace Biplov.PaymentGatewayApi
 
         }
 
+        public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            var hcBuilder = services
+                .AddHealthChecks();
+
+            hcBuilder
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddSqlServer(
+                    configuration["ConnectionString"],
+                    name: "paymentgateway-db-check",
+                    tags: new string[] { "PaymentGateway" });
+
+
+
+            hcBuilder
+                .AddRabbitMQ(
+                    $"amqp://{configuration["EventBusConnection"]}",
+                    name: "paymentgateway-rabbitmqbus-check",
+                    tags: new string[] { "rabbitmqbus" });
+
+
+            return services;
+        }
 
         public static IServiceCollection AddCustomConfiguration(this IServiceCollection services)
         {
@@ -308,75 +341,6 @@ namespace Biplov.PaymentGatewayApi
                 );
             return services;
         }
-
-
-        //public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    var accountName = configuration.GetValue<string>("AzureStorageAccountName");
-        //    var accountKey = configuration.GetValue<string>("AzureStorageAccountKey");
-
-        //    var hcBuilder = services.AddHealthChecks();
-
-        //    hcBuilder
-        //        .AddCheck("self", () => HealthCheckResult.Healthy())
-        //        .AddSqlServer(
-        //            configuration["ConnectionString"],
-        //            name: "DataCollectionDb-check",
-        //            tags: new string[] { "catalogdb" });
-
-        //if (!string.IsNullOrEmpty(accountName) && !string.IsNullOrEmpty(accountKey))
-        //{
-        //    hcBuilder
-        //        .AddAzureBlobStorage(
-        //            $"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey};EndpointSuffix=core.windows.net",
-        //            name: "catalog-storage-check",
-        //            tags: new string[] { "catalogstorage" });
-        //}
-
-        //if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
-        //{
-        //    hcBuilder
-        //        .AddAzureServiceBusTopic(
-        //            configuration["EventBusConnection"],
-        //            topicName: "eshop_event_bus",
-        //            name: "catalog-servicebus-check",
-        //            tags: new string[] { "servicebus" });
-        //}
-        //else
-        //{
-        //    hcBuilder
-        //        .AddRabbitMQ(
-        //            $"amqp://{configuration["EventBusConnection"]}",
-        //            name: "catalog-rabbitmqbus-check",
-        //            tags: new string[] { "rabbitmqbus" });
-        //}
-
-        //    return services;
-        //}
-
-        //public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    //services.Configure<DataCollectionSettings>(configuration);
-        //    services.Configure<ApiBehaviorOptions>(options =>
-        //    {
-        //        options.InvalidModelStateResponseFactory = context =>
-        //        {
-        //            var problemDetails = new ValidationProblemDetails(context.ModelState)
-        //            {
-        //                Instance = context.HttpContext.Request.Path,
-        //                Status = StatusCodes.Status400BadRequest,
-        //                Detail = "Please refer to the errors property for additional details."
-        //            };
-
-        //            return new BadRequestObjectResult(problemDetails)
-        //            {
-        //                ContentTypes = { "application/problem+json", "application/problem+xml" }
-        //            };
-        //        };
-        //    });
-
-        //    return services;
-        //}
     }
 
 }
