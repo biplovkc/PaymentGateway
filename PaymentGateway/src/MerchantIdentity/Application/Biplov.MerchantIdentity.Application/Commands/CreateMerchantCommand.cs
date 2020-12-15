@@ -21,11 +21,14 @@ namespace Biplov.MerchantIdentity.Application.Commands
         [DataMember]
         public string CommandId => $"create_merchant_{Name}_{DateTimeOffset.Now.ToUnixTimeSeconds()}";
 
+        [DataMember]
+        public string CorrelationId { get; }
         public CreateMerchantCommand(string name, string email, string supportedCurrencies, string correlationId = null) 
         {
             Name = name;
             Email = email.ToLower();
             SupportedCurrencies = supportedCurrencies;
+            CorrelationId = correlationId;
         }
     }
 }

@@ -63,9 +63,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biplov.MockBank", "src\Buil
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RiskAnalysis", "RiskAnalysis", "{82238C85-E268-41B5-AB31-B3BB3A5B0A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biplov.RiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.RiskAnalysis\Biplov.RiskAnalysis.csproj", "{62A193FC-4A30-4B12-B987-FD78E442B27D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biplov.RiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.RiskAnalysis\Biplov.RiskAnalysis.csproj", "{62A193FC-4A30-4B12-B987-FD78E442B27D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biplov.MockRiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj", "{B76A9B4E-7D95-4901-8805-F589021B4B19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biplov.MockRiskAnalysis", "src\BuildingBlocks\RiskAnalysis\Biplov.MockRiskAnalysis\Biplov.MockRiskAnalysis.csproj", "{B76A9B4E-7D95-4901-8805-F589021B4B19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{124A09AA-FFA6-4073-93A6-B05B0854698A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,6 +174,7 @@ Global
 		{82238C85-E268-41B5-AB31-B3BB3A5B0A2A} = {C21CEA7E-DA1F-4A77-9164-82D3881E3A54}
 		{62A193FC-4A30-4B12-B987-FD78E442B27D} = {82238C85-E268-41B5-AB31-B3BB3A5B0A2A}
 		{B76A9B4E-7D95-4901-8805-F589021B4B19} = {82238C85-E268-41B5-AB31-B3BB3A5B0A2A}
+		{124A09AA-FFA6-4073-93A6-B05B0854698A} = {25C5254A-652E-41E8-99BE-E986AB70B70D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F4C6DB4-C225-4CB9-AD5D-8AAD88D4967E}

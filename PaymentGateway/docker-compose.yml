@@ -19,20 +19,20 @@ services:
     networks:
       - biplovpaymentgateway-api-network
 
-  #prometheus:
-  #  image: prom/prometheus
-  #  restart: always
-  #  volumes:
-  #    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-  #  networks:
-  #    - biplovpaymentgateway-api-network
-  #
-  #grafana:
-  #  image: grafana/grafana
-  #  container_name: grafana
-  #  #command:
-  #  networks:
-  #    - biplovpaymentgateway-api-network
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - biplovpaymentgateway-api-network
+  
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    #command:
+    networks:
+      - biplovpaymentgateway-api-network
 
   merchantidentityapi:
     image: ${REGISTRY:-biplov/merchantidentityapi}:${PLATFORM:-linux}-${TAG:-latest}
