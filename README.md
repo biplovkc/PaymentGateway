@@ -1,6 +1,6 @@
 # Payment Gateway
 
-This repository includes sample payment which can be used by merchants to make payment request. The api projects are written in .Net Core 3.1 where as non API project are targeting NetStandard 2.1
+This repository includes sample payment which can be used by merchants to make payment request. The api projects target .Net Core 3.1 whereas non-API projects target NetStandard 2.1
 
 ## Features/Technologies
 
