@@ -61,7 +61,7 @@ namespace Biplov.PaymentGatewayApi.Controllers
         /// Create a new payment
         /// </summary>
         /// <param name="request">create payment request</param>
-        /// <returns>route pointing payment detail info</returns>
+        /// <returns>route pointing payment detail info in header's location key</returns>
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
