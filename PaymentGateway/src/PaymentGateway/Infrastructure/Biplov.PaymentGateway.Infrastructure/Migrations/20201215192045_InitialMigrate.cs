@@ -29,6 +29,9 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MerchantIdentity = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PrivateKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupportedCurrencies = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -37,15 +40,32 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false),
+                    Time = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MerchantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CardToken = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Cvv = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
                     Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RequestIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressLine1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     AddressLine2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -57,18 +77,20 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                     RecipientFirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     RecipientLastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     RecipientZipCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    RequestedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     SuccessWebHookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ErrorWebHookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ErrorWebHookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MerchantId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_Merchants_MerchantId",
-                        column: x => x.MerchantId,
+                        name: "FK_Payments_Merchants_MerchantId1",
+                        column: x => x.MerchantId1,
                         principalTable: "Merchants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,10 +128,9 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_MerchantId",
+                name: "IX_Payments_MerchantId1",
                 table: "Payments",
-                column: "MerchantId",
-                unique: true);
+                column: "MerchantId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -119,6 +140,9 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaymentMetaData");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Payments");

@@ -51,7 +51,7 @@ namespace Biplov.PaymentGatewayApi
             services.AddOptions()
                 .AddCustomMVC()
                 .AddCustomIntegrations(Configuration)
-                .AddCustomHealthCheck(Configuration)
+                //.AddCustomHealthCheck(Configuration)
                 .AddEventBus(Configuration)
                 .AddCustomDbContext(Configuration)
                 .AddSwagger()
@@ -133,8 +133,8 @@ namespace Biplov.PaymentGatewayApi
             //app.UseHttpsRedirection();
 
             //prometheus
-            app.UseHttpMetrics();
-            app.UseHealthChecksPrometheusExporter("/metrics");
+            //app.UseHttpMetrics();
+            //app.UseHealthChecksPrometheusExporter("/metrics");
 
             app.UseSwagger()
                 .UseSwaggerUI(setupAction: setup =>
@@ -149,7 +149,7 @@ namespace Biplov.PaymentGatewayApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapMetrics();
+                //endpoints.MapMetrics();
             });
 
             ConfigureEventBus(app);
@@ -191,30 +191,30 @@ namespace Biplov.PaymentGatewayApi
 
         }
 
-        public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
-        {
+        //public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
+        //{
 
-            var hcBuilder = services
-                .AddHealthChecks();
+        //    var hcBuilder = services
+        //        .AddHealthChecks();
 
-            hcBuilder
-                .AddCheck("self", () => HealthCheckResult.Healthy())
-                .AddSqlServer(
-                    configuration["ConnectionString"],
-                    name: "paymentgateway-db-check",
-                    tags: new string[] { "PaymentGateway" });
-
-
-
-            hcBuilder
-                .AddRabbitMQ(
-                    $"amqp://{configuration["EventBusConnection"]}",
-                    name: "paymentgateway-rabbitmqbus-check",
-                    tags: new string[] { "rabbitmqbus" });
+        //    hcBuilder
+        //        .AddCheck("self", () => HealthCheckResult.Healthy())
+        //        .AddSqlServer(
+        //            configuration["ConnectionString"],
+        //            name: "paymentgateway-db-check",
+        //            tags: new string[] { "PaymentGateway" });
 
 
-            return services;
-        }
+
+        //    hcBuilder
+        //        .AddRabbitMQ(
+        //            $"amqp://{configuration["EventBusConnection"]}",
+        //            name: "paymentgateway-rabbitmqbus-check",
+        //            tags: new string[] { "rabbitmqbus" });
+
+
+        //    return services;
+        //}
 
         public static IServiceCollection AddCustomConfiguration(this IServiceCollection services)
         {

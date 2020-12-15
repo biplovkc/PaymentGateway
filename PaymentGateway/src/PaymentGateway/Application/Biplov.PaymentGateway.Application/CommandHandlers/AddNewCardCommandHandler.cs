@@ -4,6 +4,7 @@ using Biplov.BankService;
 using Biplov.Common.Core;
 using Biplov.PaymentGateway.Application.Commands;
 using Biplov.PaymentGateway.Application.Constants;
+using Biplov.PaymentGateway.Application.Queries;
 using Biplov.PaymentGateway.Application.Response;
 using Biplov.PaymentGateway.Domain.Interfaces;
 using Biplov.PaymentGateway.Infrastructure.Idempotency;
@@ -15,14 +16,16 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
     public class AddNewCardCommandHandler : IRequestHandler<AddNewCardCommand, Result>
     {
         private readonly ICardRepository _cardRepository;
+        private readonly ICardQuery _cardQuery;
         private readonly IBankService _bankService;
         private readonly ILogger<AddNewCardCommandHandler> _logger;
 
-        public AddNewCardCommandHandler(ICardRepository cardRepository, IBankService bankService, ILogger<AddNewCardCommandHandler> logger)
+        public AddNewCardCommandHandler(ICardRepository cardRepository, IBankService bankService, ILogger<AddNewCardCommandHandler> logger, ICardQuery cardQuery)
         {
             _cardRepository = cardRepository;
             _bankService = bankService;
             _logger = logger;
+            _cardQuery = cardQuery;
         }
 
         public async Task<Result> Handle(AddNewCardCommand request, CancellationToken cancellationToken)
@@ -30,6 +33,13 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             _logger.LogInformation("Sending card validation request for cardNumber : {cardNumber} with correlation id : {correlationId} to bank ",request.Number, request.CorrelationId);
             var bankResult = await _bankService.ValidateCard(request.Name, request.Number, request.ExpiryMonth,
                 request.ExpiryYear, request.Cvv);
+
+            var existingCard = await _cardQuery.GetCardByCardNumberAsync(request.Number);
+
+            if (existingCard != null && existingCard.Cvv == request.Cvv)
+            {
+                return Result.Ok();
+            }
 
             if (!bankResult.IsSuccess)
             {

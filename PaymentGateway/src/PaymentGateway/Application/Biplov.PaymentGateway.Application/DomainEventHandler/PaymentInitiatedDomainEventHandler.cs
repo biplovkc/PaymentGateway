@@ -28,7 +28,7 @@ namespace Biplov.PaymentGateway.Application.DomainEventHandler
             var recipient = new Biplov.BankService.PaymentRecipient
             {
                 AccountNumber = notification.Recipient.AccountNumber,
-                DateOfBirth = notification.Recipient.DateOfBirth.ToString(),
+                DateOfBirth = notification.Recipient.DateOfBirth.ToString("d"),
                 FirstName = notification.Recipient.FirstName,
                 LastName = notification.Recipient.LastName,
                 Zip = notification.Recipient.ZipCode
