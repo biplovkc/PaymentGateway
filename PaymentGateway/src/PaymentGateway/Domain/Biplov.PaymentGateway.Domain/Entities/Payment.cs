@@ -13,7 +13,7 @@ namespace Biplov.PaymentGateway.Domain.Entities
         
         public string PaymentId { get; } 
 
-        public Guid MerchantId { get; }
+        public Guid MerchantIdentityId { get; }
 
         /// <summary>
         /// Id payment source.
@@ -81,7 +81,7 @@ namespace Biplov.PaymentGateway.Domain.Entities
                 throw new ArgumentException("invalid_amount");
 
             PaymentId = $"payid_{Guid.NewGuid():N}";
-            MerchantId = merchantId;
+            MerchantIdentityId = merchantId;
             Currency = currency;
             Amount = amount;
             Reference = reference;

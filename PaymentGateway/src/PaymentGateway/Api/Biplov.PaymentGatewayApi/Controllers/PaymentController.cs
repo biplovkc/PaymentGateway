@@ -9,15 +9,16 @@ using Biplov.PaymentGateway.Application.Constants;
 using Biplov.PaymentGateway.Application.Dtos;
 using Biplov.PaymentGateway.Application.Queries;
 using Biplov.PaymentGateway.Application.Request;
-
+using Biplov.PaymentGatewayApi.Filters;
 using MediatR;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Biplov.PaymentGatewayApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authenticate]
     public class PaymentController : BaseController
     {
         private readonly IMediator _mediator;
@@ -44,13 +45,14 @@ namespace Biplov.PaymentGatewayApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]        
         public async Task<IActionResult> GetPayment(string paymentId, [FromQuery]string fields)
         {
-            var payment = await _paymentQuery.GetPaymentInfoAsync(paymentId);
+            var merchantIdentity = await _merchantQuery.GetMerchantIdAsync(GetAuthorizationKey());
+            var payment = await _paymentQuery.GetPaymentInfoAsync(paymentId, merchantIdentity);
 
             if (payment.IsSuccess)
                 return Ok(payment.Value.ShapeData(fields));
 
             if (!payment.IsSuccess && payment.Error.Equals(ExternalErrorReason.PaymentNotFound))
-                return NotFound(paymentId);
+                return NotFound();
 
             return UnprocessableEntity(payment.Error);
         }
@@ -78,6 +80,7 @@ namespace Biplov.PaymentGatewayApi.Controllers
             var command = new IdentifiedCommand<CreatePaymentCommand, Result>(innerCommand);
 
             var result = await _mediator.Send(command);
+
             if (!result.IsSuccess)
                 return UnprocessableEntity(result.Error);
 

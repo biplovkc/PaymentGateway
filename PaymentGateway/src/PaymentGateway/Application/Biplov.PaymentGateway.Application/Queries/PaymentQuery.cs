@@ -20,14 +20,14 @@ namespace Biplov.PaymentGateway.Application.Queries
             _logger = logger;
         }
 
-        public async Task<Result<PaymentDto>> GetPaymentInfoAsync(string paymentId)
+        public async Task<Result<PaymentDto>> GetPaymentInfoAsync(string paymentId, Guid merchantIdentity)
         {
             try
             {
                 var payment = await _db.Payments
                     .AsNoTracking()
                     .Include(x=>x.Source)
-                    .SingleOrDefaultAsync(x => x.PaymentId.Equals(paymentId));
+                    .SingleOrDefaultAsync(x => x.PaymentId == paymentId && x.MerchantIdentityId == merchantIdentity);
 
                 if (payment is null)
                 {
@@ -41,7 +41,7 @@ namespace Biplov.PaymentGateway.Application.Queries
                     PaymentId = paymentId,
                     PaymentSource = payment.Source.CardToken,
                     CreatedAt = payment.RequestedAt,
-                    Status = payment.Status
+                    Status = payment.Status.ToString()
                 });
             }
             catch (Exception e)

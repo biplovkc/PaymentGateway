@@ -32,6 +32,9 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence.EntityConfiguration
             builder.Property(x => x.Reference)
                 .HasColumnName("Reference");
 
+            builder.Property(x => x.MerchantIdentityId)
+                .HasColumnName("MerchantIdentityId");
+
             builder.Property(x => x.RequestIp)
                 .HasColumnName("RequestIp");
 

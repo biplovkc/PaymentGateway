@@ -1,5 +1,4 @@
 ﻿using System;
-using Biplov.PaymentGateway.Domain.Enum;
 
 namespace Biplov.PaymentGateway.Application.Dtos
 {
@@ -7,7 +6,7 @@ namespace Biplov.PaymentGateway.Application.Dtos
     {
         public string PaymentId { get; set; }
 
-        public PaymentStatus Status { get; set; }
+        public string Status { get; set; }
 
         public decimal Amount { get; set; }
 

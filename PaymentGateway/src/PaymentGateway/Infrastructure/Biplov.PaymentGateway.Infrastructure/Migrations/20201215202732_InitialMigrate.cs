@@ -58,6 +58,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MerchantIdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CardToken = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Cvv = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
                     Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
@@ -80,14 +81,14 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                     RequestedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     SuccessWebHookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ErrorWebHookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MerchantId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    MerchantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_Merchants_MerchantId1",
-                        column: x => x.MerchantId1,
+                        name: "FK_Payments_Merchants_MerchantId",
+                        column: x => x.MerchantId,
                         principalTable: "Merchants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -128,9 +129,9 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_MerchantId1",
+                name: "IX_Payments_MerchantId",
                 table: "Payments",
-                column: "MerchantId1");
+                column: "MerchantId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

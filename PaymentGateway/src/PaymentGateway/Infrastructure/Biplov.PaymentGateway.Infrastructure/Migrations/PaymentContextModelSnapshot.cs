@@ -105,8 +105,12 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
-                    b.Property<Guid?>("MerchantId1")
+                    b.Property<Guid?>("MerchantId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MerchantIdentityId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("MerchantIdentityId");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("nvarchar(max)")
@@ -130,7 +134,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MerchantId1");
+                    b.HasIndex("MerchantId");
 
                     b.ToTable("Payments");
                 });
@@ -156,7 +160,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Migrations
                 {
                     b.HasOne("Biplov.PaymentGateway.Domain.Entities.Merchant", "Merchant")
                         .WithMany("Payments")
-                        .HasForeignKey("MerchantId1");
+                        .HasForeignKey("MerchantId");
 
                     b.OwnsOne("Biplov.PaymentGateway.Domain.Entities.Address", "BillingAddress", b1 =>
                         {

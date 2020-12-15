@@ -34,7 +34,7 @@ namespace Biplov.PaymentGateway.Application.CommandHandlers
             // Check if currency is supported for given merchant
             var isCurrencySupported = await _merchantQuery.IsCurrencySupported(request.MerchantId, request.Currency);
             if (!isCurrencySupported)
-                return Result.Fail<string>(ExternalErrorReason.CurrencyNotSupported);
+                return Result.Fail(ExternalErrorReason.CurrencyNotSupported);
 
             // Check if card if valid
             var isCardValid = await _cardQuery.IsCardValid(request.CardToken, request.Cvv);
