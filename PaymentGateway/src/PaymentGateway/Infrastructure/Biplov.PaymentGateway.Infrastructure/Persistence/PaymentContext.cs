@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Biplov.Common.Core;
 using Biplov.PaymentGateway.Domain.Entities;
+using Biplov.PaymentGateway.Domain.Enum;
 using Biplov.PaymentGateway.Infrastructure.Persistence.EntityConfiguration;
 using MediatR;
 
@@ -60,7 +63,28 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence
             // performed through the DbContext will be committed
             try
             {
+                await base.SaveChangesAsync(cancellationToken);
                 await _mediator.DispatchDomainEventAsync(this);
+                return Result.Ok();
+            }
+            catch (DbUpdateConcurrencyException c)
+            {
+                foreach (var entityEntry in c.Entries)
+                {
+                    if (entityEntry.Entity is Payment)
+                    {
+                        var proposedValues = entityEntry.CurrentValues;
+                        var databaseValues = await entityEntry.GetDatabaseValuesAsync();
+                        foreach (var property in proposedValues.Properties)
+                        {
+                            var proposedValue = proposedValues[property];
+                            var databaseValue = databaseValues[property];
+
+                        }
+                        // Refresh original values to bypass next concurrency check
+                        entityEntry.OriginalValues.SetValues(proposedValues);
+                    }
+                }
                 await base.SaveChangesAsync(cancellationToken);
                 return Result.Ok();
             }

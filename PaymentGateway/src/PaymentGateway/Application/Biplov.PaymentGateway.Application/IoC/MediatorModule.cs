@@ -2,6 +2,7 @@
 
 using Autofac;
 using Biplov.PaymentGateway.Application.CommandHandlers;
+using Biplov.PaymentGateway.Application.DomainEventHandler;
 using Biplov.PaymentGateway.Domain.Events;
 
 using MediatR;
@@ -20,7 +21,7 @@ namespace Biplov.PaymentGateway.Application.IoC
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             // Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events
-            builder.RegisterAssemblyTypes(typeof(PaymentInitiatedDomainEvent).GetTypeInfo().Assembly)
+            builder.RegisterAssemblyTypes(typeof(PaymentInitiatedDomainEventHandler).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(INotificationHandler<>));
 
             builder.Register<ServiceFactory>(context =>

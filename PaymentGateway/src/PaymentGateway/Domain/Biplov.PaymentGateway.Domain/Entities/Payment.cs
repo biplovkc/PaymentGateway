@@ -62,6 +62,9 @@ namespace Biplov.PaymentGateway.Domain.Entities
 
         private readonly List<MetaData> _metaData = new List<MetaData>();
 
+        public byte[] RowVersion { get; }
+
+
         /// <summary>
         /// Additional metadata for given payment
         /// </summary>

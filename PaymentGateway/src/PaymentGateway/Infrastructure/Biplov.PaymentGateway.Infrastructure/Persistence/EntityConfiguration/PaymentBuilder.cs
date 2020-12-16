@@ -134,10 +134,12 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence.EntityConfiguration
 
                 r.Property(x => x.Value)
                     .HasColumnName("Value");
+                r.WithOwner();
             });
 
             var metaDataNavigation = builder.Metadata.FindNavigation(nameof(Payment.MetaData));
             metaDataNavigation.SetField("_metaData");
+
         }
     }
 }
