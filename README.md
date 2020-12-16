@@ -71,7 +71,7 @@ Domain layer consists of domain models, domain events as well as Aggregate root'
 #### -Infrastructure Layer
 Infrastructure layer contains implementation of Aggregrate Root's repository and data persistence. Both the services currently use MsSql database for data persistence. Infrastructure layer's repository implementation uses EntityFramework as ORM tool for data persistence. This layer is also responsible for dispatching `DomainEvent` that were raised by domain models.
 
-Domain events in this particular implementation is dispatched before changes to domain models are commited. 
+Domain events in this particular implementation is dispatched after changes to domain models are commited. 
 
 Other option could have been to dispatch the events after the changes were commited which means eventual consistency should be handled accordingly in case any handlers fail to handle the domain events.
 
