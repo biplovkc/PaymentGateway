@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Biplov.MerchantIdentity.Infrastructure.Persistence;
 using Biplov.MerchantIdentity.Infrastructure.Persistence.SeedDataGenerator;
 using Biplov.MerchantIdentityApi.WebHost;
@@ -27,12 +28,12 @@ namespace Biplov.MerchantIdentityApi
                 var host = BuildWebHost(configuration, args);
 
                 Log.Information("Applying migrations ({MerchantIdentityContext})...", AppName);
-                host.MigrateDbContext<MerchantIdentityContext>(async (context, services) =>
+                host.MigrateDbContext<MerchantIdentityContext>((context, services) =>
                 {
                     var logger = services.GetService<ILogger<MerchantIdentityContextSeed>>();
 
-                    await new MerchantIdentityContextSeed()
-                       .Seed(context, logger);
+                    Task.FromResult(new MerchantIdentityContextSeed()
+                       .Seed(context, logger));
                 });
 
                 //CreateHostBuilder(args).Build().Run();

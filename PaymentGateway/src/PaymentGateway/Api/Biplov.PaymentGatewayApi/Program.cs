@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Biplov.PaymentGateway.Infrastructure.Persistence;
 using Biplov.PaymentGatewayApi.WebHost;
 using Microsoft.AspNetCore.Hosting;
@@ -26,10 +27,10 @@ namespace Biplov.PaymentGatewayApi
                 var host = BuildWebHost(configuration, args);
 
                 Log.Information("Applying migrations ({PaymentGatewayContext})...", AppName);
-                host.MigrateDbContext<PaymentContext>(async (context, services) =>
+                host.MigrateDbContext<PaymentContext>((context, services) =>
                 {
                     var logger = services.GetService<ILogger<PaymentContextSeed>>();
-                    await new PaymentContextSeed().Seed(context, logger);
+                    Task.FromResult(new PaymentContextSeed().Seed(context, logger));
 
                 });
 
