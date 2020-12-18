@@ -1,12 +1,8 @@
 using System;
 using System.IO;
-using System.Linq;
 using Biplov.PaymentGateway.Infrastructure.Persistence;
 using Biplov.PaymentGatewayApi.WebHost;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,13 +28,9 @@ namespace Biplov.PaymentGatewayApi
                 Log.Information("Applying migrations ({PaymentGatewayContext})...", AppName);
                 host.MigrateDbContext<PaymentContext>((context, services) =>
                 {
-                    //var hasPendingMigrations = context.Database.GetPendingMigrations();
-                    //if (hasPendingMigrations != null && hasPendingMigrations.Any())
-                    //{
-                    //    // Just a temporary hack
-                    //    context.Database.EnsureDeleted();
-                    //}
-                    context.Database.EnsureCreated();
+                    var logger = services.GetService<ILogger<PaymentContextSeed>>();
+                    new PaymentContextSeed().Seed(context, logger);
+
                 });
 
                 Log.Information("Starting web host ({ApplicationContext})...", AppName);
