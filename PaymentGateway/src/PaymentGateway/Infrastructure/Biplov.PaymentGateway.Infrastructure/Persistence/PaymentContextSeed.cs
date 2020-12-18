@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Biplov.PaymentGateway.Infrastructure.Persistence
 {
     public class PaymentContextSeed
     {
-        public void Seed(PaymentContext context, ILogger<PaymentContextSeed> logger, int? retry = 5)
+        public async Task Seed(PaymentContext context, ILogger<PaymentContextSeed> logger, int? retry = 5)
         {
             var retryForAvailability = retry ?? 0;
             try
@@ -14,6 +15,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence
             }
             catch (Exception e)
             {
+                await Task.Delay(2000);
                 if (retryForAvailability < 10)
                 {
                     retryForAvailability++;
