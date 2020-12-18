@@ -26,10 +26,10 @@ namespace Biplov.PaymentGatewayApi
                 var host = BuildWebHost(configuration, args);
 
                 Log.Information("Applying migrations ({PaymentGatewayContext})...", AppName);
-                host.MigrateDbContext<PaymentContext>((context, services) =>
+                host.MigrateDbContext<PaymentContext>(async (context, services) =>
                 {
                     var logger = services.GetService<ILogger<PaymentContextSeed>>();
-                    new PaymentContextSeed().Seed(context, logger);
+                    await new PaymentContextSeed().Seed(context, logger);
 
                 });
 
