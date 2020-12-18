@@ -27,11 +27,11 @@ namespace Biplov.MerchantIdentityApi
                 var host = BuildWebHost(configuration, args);
 
                 Log.Information("Applying migrations ({MerchantIdentityContext})...", AppName);
-                host.MigrateDbContext<MerchantIdentityContext>((context, services) =>
+                host.MigrateDbContext<MerchantIdentityContext>(async (context, services) =>
                 {
                     var logger = services.GetService<ILogger<MerchantIdentityContextSeed>>();
 
-                    new MerchantIdentityContextSeed()
+                    await new MerchantIdentityContextSeed()
                        .Seed(context, logger);
                 });
 
