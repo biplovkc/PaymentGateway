@@ -32,8 +32,8 @@ namespace Biplov.MerchantIdentityApi
                 {
                     var logger = services.GetService<ILogger<MerchantIdentityContextSeed>>();
 
-                    Task.FromResult(new MerchantIdentityContextSeed()
-                       .Seed(context, logger));
+                    new MerchantIdentityContextSeed()
+                       .Seed(context, logger).GetAwaiter().GetResult();
                 });
 
                 //CreateHostBuilder(args).Build().Run();

@@ -30,8 +30,7 @@ namespace Biplov.PaymentGatewayApi
                 host.MigrateDbContext<PaymentContext>((context, services) =>
                 {
                     var logger = services.GetService<ILogger<PaymentContextSeed>>();
-                    Task.FromResult(new PaymentContextSeed().Seed(context, logger, 10));
-
+                    new PaymentContextSeed().Seed(context, logger, 10).GetAwaiter().GetResult();
                 });
 
                 Log.Information("Starting web host ({ApplicationContext})...", AppName);
