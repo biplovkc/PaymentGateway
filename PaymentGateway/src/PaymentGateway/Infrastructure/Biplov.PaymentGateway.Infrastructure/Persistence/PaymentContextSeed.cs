@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Biplov.PaymentGateway.Infrastructure.Persistence
@@ -11,7 +13,10 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence
             var retryForAvailability = retry ?? 0;
             try
             {
-                context.Database.EnsureCreated();
+                if (!(await context.Database.GetAppliedMigrationsAsync()).Any())
+                {
+                    await context.Database.EnsureCreatedAsync();
+                }
             }
             catch (Exception e)
             {
@@ -20,7 +25,7 @@ namespace Biplov.PaymentGateway.Infrastructure.Persistence
                 {
                     retryForAvailability++;
                     logger.LogError(e, "EXCEPTION ERROR while migrating {DbContextName}", nameof(PaymentContext));
-                    Seed(context, logger, retryForAvailability);
+                    await Seed(context, logger, retryForAvailability);
                 }
             }
         }
